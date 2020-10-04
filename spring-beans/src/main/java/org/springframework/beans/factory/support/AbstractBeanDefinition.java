@@ -66,24 +66,28 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	public static final String SCOPE_DEFAULT = "";
 
 	/**
+	 * 默认根据@autowire手动装配
 	 * Constant that indicates no external autowiring at all.
 	 * @see #setAutowireMode
 	 */
 	public static final int AUTOWIRE_NO = AutowireCapableBeanFactory.AUTOWIRE_NO;
 
 	/**
+	 * 根据名字自动装配
 	 * Constant that indicates autowiring bean properties by name.
 	 * @see #setAutowireMode
 	 */
 	public static final int AUTOWIRE_BY_NAME = AutowireCapableBeanFactory.AUTOWIRE_BY_NAME;
 
 	/**
+	 * 根据类型自动装配
 	 * Constant that indicates autowiring bean properties by type.
 	 * @see #setAutowireMode
 	 */
 	public static final int AUTOWIRE_BY_TYPE = AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE;
 
 	/**
+	 * 根据构造器装配
 	 * Constant that indicates autowiring a constructor.
 	 * @see #setAutowireMode
 	 */
@@ -100,18 +104,21 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	public static final int AUTOWIRE_AUTODETECT = AutowireCapableBeanFactory.AUTOWIRE_AUTODETECT;
 
 	/**
+	 * 不需要检查依赖
 	 * Constant that indicates no dependency check at all.
 	 * @see #setDependencyCheck
 	 */
 	public static final int DEPENDENCY_CHECK_NONE = 0;
 
 	/**
+	 * 检查对象引用的依赖
 	 * Constant that indicates dependency checking for object references.
 	 * @see #setDependencyCheck
 	 */
 	public static final int DEPENDENCY_CHECK_OBJECTS = 1;
 
 	/**
+	 * 简单属性的依赖
 	 * Constant that indicates dependency checking for "simple" properties.
 	 * @see #setDependencyCheck
 	 * @see org.springframework.beans.BeanUtils#isSimpleProperty
@@ -119,6 +126,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	public static final int DEPENDENCY_CHECK_SIMPLE = 2;
 
 	/**
+	 * 对象属性和简单属性都检查依赖
 	 * Constant that indicates dependency checking for all properties
 	 * (object references as well as "simple" properties).
 	 * @see #setDependencyCheck
@@ -138,26 +146,56 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	public static final String INFER_METHOD = "(inferred)";
 
 
+	/**
+	 * 用于保存Bean组件的class对象
+	 */
 	@Nullable
 	private volatile Object beanClass;
 
+	/**
+	 * Bean的作用范围
+	 * 默认是 singleton
+	 */
 	@Nullable
 	private String scope = SCOPE_DEFAULT;
 
+	/**
+	 * 判断当前的Bean是不是抽象的
+	 */
 	private boolean abstractFlag = false;
 
+	/**
+	 * 判断当前的Bean是不是懒加载的
+	 */
 	@Nullable
 	private Boolean lazyInit;
 
+	/**
+	 * 默认的注入模型是0不支持外部注入
+	 */
 	private int autowireMode = AUTOWIRE_NO;
 
+	/**
+	 * 强制依赖检查，当检查到没有需要注册的依赖就会抛出异常
+	 * 默认的依赖检查模式时none
+	 */
 	private int dependencyCheck = DEPENDENCY_CHECK_NONE;
 
+	/**
+	 * 当前的bean创建  必须要要依赖哪个bean先被创建
+	 */
 	@Nullable
 	private String[] dependsOn;
 
+	/**
+	 *设置为false的时候，这样容器在自动装配对象的时候，会
+	 * 不考虑当前的bean(他不会被看作为其他bean的依赖的bean,但是他依赖其他的bean是能够被自动装配进来的)
+	 */
 	private boolean autowireCandidate = true;
 
+	/**
+	 *当发生自动装配的时候，假如某个bean会发现多个,那么标注了primary 为true的首先被注入
+	 */
 	private boolean primary = false;
 
 	private final Map<String, AutowireCandidateQualifier> qualifiers = new LinkedHashMap<>();
@@ -165,32 +203,79 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	@Nullable
 	private Supplier<?> instanceSupplier;
 
+	/**
+	 *允许访问非public的构造方法
+	 */
 	private boolean nonPublicAccessAllowed = true;
 
+	/**
+	 * 是否允许宽松模式来解析构造函数..设置为false的话
+	 *
+	 * public class Person {
+	 *
+	 *     private String name;
+	 *
+	 *     private Integer age;
+	 *
+	 *     public Person(String name){this.name = name};
+	 *
+	 *     public Person(Integer age){this.age = age};
+	 *
+	 * }
+	 * 这种情况下就会抛出异常，，，因为spring 无法确定使用哪个构造器函数
+	 */
 	private boolean lenientConstructorResolution = true;
 
+	/**
+	 * 假如是通过@Configuration 的@Bean的方式扫描进来的组件
+	 * 那么该属性用于保存我们的是由哪个配置类
+	 */
 	@Nullable
 	private String factoryBeanName;
 
+	/**
+	 * 这个用于保存我们的标注了@Bean的方法名称
+	 */
 	@Nullable
 	private String factoryMethodName;
 
+	/**
+	 * 记录构造器的参数的制
+	 */
 	@Nullable
 	private ConstructorArgumentValues constructorArgumentValues;
 
+	/**
+	 * 普通属性集合
+	 */
 	@Nullable
 	private MutablePropertyValues propertyValues;
 
+	/**
+	 * 属性的集合 用户保存look-method 和replace-method
+	 */
 	private MethodOverrides methodOverrides = new MethodOverrides();
 
+	/**
+	 * 指定init的方法
+	 */
 	@Nullable
 	private String initMethodName;
 
+	/**
+	 * 保存我们的destoryMethod
+	 */
 	@Nullable
 	private String destroyMethodName;
 
+	/**
+	 *  是否执行 init 方法
+	 */
 	private boolean enforceInitMethod = true;
 
+	/**
+	 * 是否执行 destroy 方法
+	 */
 	private boolean enforceDestroyMethod = true;
 
 	private boolean synthetic = false;
