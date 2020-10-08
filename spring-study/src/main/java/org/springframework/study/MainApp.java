@@ -21,10 +21,10 @@ public class MainApp {
 	}
 	public static void main(String[] args) {
 		ApplicationContext context=new AnnotationConfigApplicationContext(MainApp.class);
-//		UserServiceImpl bean = context.getBean("userServiceImpl",UserServiceImpl.class);
-//		bean.sayHi();
 		Car car = context.getBean("car", Car.class);
 		System.out.println(car.getName());
+//		UserServiceImpl bean = context.getBean("userServiceImpl",UserServiceImpl.class);
+//		bean.sayHi();
 
 	}
 }

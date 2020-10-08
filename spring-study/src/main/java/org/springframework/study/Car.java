@@ -21,5 +21,4 @@ public class Car {
 		this.name = name;
 	}
 
-
 }

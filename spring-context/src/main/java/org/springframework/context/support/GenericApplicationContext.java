@@ -109,6 +109,11 @@ public class GenericApplicationContext extends AbstractApplicationContext implem
 	 * @see #refresh
 	 */
 	public GenericApplicationContext() {
+		/**
+		 * 调用父类的构造函数,为ApplicationContext spring上下文对象初始beanFactory
+		 * 为啥是DefaultListableBeanFactory？我们去看BeanFactory接口的时候
+		 * 发DefaultListableBeanFactory是最底层的实现，功能是最全的
+		 */
 		this.beanFactory = new DefaultListableBeanFactory();
 	}
 
@@ -266,6 +271,7 @@ public class GenericApplicationContext extends AbstractApplicationContext implem
 			throw new IllegalStateException(
 					"GenericApplicationContext does not support multiple refresh attempts: just call 'refresh' once");
 		}
+		//指定bean工厂的序列化ID
 		this.beanFactory.setSerializationId(getId());
 	}
 
