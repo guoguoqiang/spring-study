@@ -253,7 +253,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			// Simply call processConfigurationClasses lazily at this point then.
 			processConfigBeanDefinitions((BeanDefinitionRegistry) beanFactory);
 		}
-
+		// 使用cglib对配置类进行代理，因为@Bean方法到时候进行创建bean的实例
 		enhanceConfigurationClasses(beanFactory);
 		beanFactory.addBeanPostProcessor(new ImportAwareBeanPostProcessor(beanFactory));
 	}

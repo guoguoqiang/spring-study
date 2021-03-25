@@ -31,9 +31,9 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
  *
  * @author Chris Beams
  * @author Sebastien Deleuze
- * @since 3.1
  * @see EnableTransactionManagement
  * @see TransactionManagementConfigurationSelector
+ * @since 3.1
  */
 @Configuration(proxyBeanMethods = false)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
@@ -62,6 +62,7 @@ public class ProxyTransactionManagementConfiguration extends AbstractTransaction
 	@Bean
 	@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 	public TransactionInterceptor transactionInterceptor(TransactionAttributeSource transactionAttributeSource) {
+		// @Transactional 代理的逻辑
 		TransactionInterceptor interceptor = new TransactionInterceptor();
 		interceptor.setTransactionAttributeSource(transactionAttributeSource);
 		if (this.txManager != null) {

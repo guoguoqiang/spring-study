@@ -261,7 +261,7 @@ final class PostProcessorRegistrationDelegate {
 	public static void registerBeanPostProcessors(
 			ConfigurableListableBeanFactory beanFactory, AbstractApplicationContext applicationContext) {
 		//去容器中获取所有的BeanPostProcessor 的名称(还是bean定义)
-		String[] postProcessorNames = beanFactory.getBeanNamesForType(BeanPostProcessor.class, true, false);
+			String[] postProcessorNames = beanFactory.getBeanNamesForType(BeanPostProcessor.class, true, false);
 
 		/**
 		 * bean的后置处理器的个数 beanFactory.getBeanPostProcessorCount()成品的个数 之前refresh-->prepareBeanFactory()中注册的

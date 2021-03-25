@@ -17,9 +17,9 @@ public class UserBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 		// 获取Bean定义
-		BeanDefinition beanDefinition = beanFactory.getBeanDefinition("car");
+//		BeanDefinition beanDefinition = beanFactory.getBeanDefinition("car");
 		// 修改
-		beanDefinition.setBeanClassName("org.springframework.study.Person");
+//		beanDefinition.setBeanClassName("org.springframework.study.Person");
 
 	}
 }

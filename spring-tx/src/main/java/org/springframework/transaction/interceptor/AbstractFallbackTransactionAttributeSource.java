@@ -150,6 +150,7 @@ public abstract class AbstractFallbackTransactionAttributeSource implements Tran
 	@Nullable
 	protected TransactionAttribute computeTransactionAttribute(Method method, @Nullable Class<?> targetClass) {
 		// Don't allow no-public methods as required.
+		// 不是public 返回null
 		if (allowPublicMethodsOnly() && !Modifier.isPublic(method.getModifiers())) {
 			return null;
 		}
